@@ -6,6 +6,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../../redux/user/userSlice";
+import Oath from "../components/Oath";
 
 export default function SignIp() {
   const [formData, setFormData] = useState({});
@@ -68,11 +69,12 @@ export default function SignIp() {
         >
           {loading ? "Loading..." : "sign up"}
         </button>
+        <Oath />
       </form>
       <div className="flex gap-2 mt-5">
         <p>{`Don't have an account?`}</p>
         <Link to="/sign-up">
-          <span className=" text-blue-700">Sing un</span>
+          <span className=" text-blue-700">Sing up</span>
         </Link>
       </div>
       {error && <p className=" text-red-500 mt-500">{error}</p>}
