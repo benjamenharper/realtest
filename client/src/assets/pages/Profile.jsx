@@ -115,7 +115,7 @@ export default function Profile() {
       dispatch(signOutUserStart());
       const res = await fetch("/api/auth/signOut");
       const data = await res.json();
-      console.log(data);
+      //console.log(data);
       if (data.success === false) {
         dispatch(signOutUserFailure(data.message));
         return;
