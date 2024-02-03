@@ -102,6 +102,7 @@ after this you can use this file to deploy project on server.
 
 ## Structure
 
+```
 |-- api
 | |-- controllers
 | |-- models
@@ -121,6 +122,8 @@ after this you can use this file to deploy project on server.
 | | |-- main.js
 | | |-- index.css
 | |--index.js
+
+```
 
 ### Author
 
