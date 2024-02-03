@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
 
@@ -47,28 +48,31 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <div className="min-h-[80vh]">
       <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-slate-500">perfect</span>
+          Find your next <span className="text-blue-700">perfect</span>
           <br />
           place with ease
         </h1>
         <div className="text-gray-400 text-xs sm:text-sm">
-          Sahand Estate is the best place to find your next perfect place to
-          live.
+          Elite Estate Solutions is the best place to find your next perfect
+          place to live.
           <br />
           We have a wide range of properties for you to choose from.
         </div>
         <Link
           to={"/search"}
-          className="text-xs sm:text-sm text-blue-800 font-bold hover:underline"
+          className="text-xs sm:text-sm flex justify-left items-center gap-2"
         >
-          Let`s get started...
+          <FaArrowAltCircleRight className="text-blue-700 hover:font-bold" />
+          <span className=" text-blue-700 hover:underline duration-300 font-bold ">
+            Let`s get started...
+          </span>
         </Link>
       </div>
       {/* swiper */}
-      <Swiper navigation>
+      <Swiper navigation className=" max-w-6xl rounded-md">
         {offerListings &&
           offerListings.length > 0 &&
           offerListings.map((listing) => (
@@ -95,13 +99,16 @@ export default function Home() {
                 Recent offers
               </h2>
               <Link
-                className="text-sm text-blue-800 hover:underline"
                 to={"/search?offer=true"}
+                className="text-xs sm:text-sm flex justify-left items-center gap-2 my-2"
               >
-                Show more offers
+                <FaArrowAltCircleRight className="text-blue-700 hover:font-bold" />
+                <span className=" text-blue-700 hover:underline duration-300 font-bold ">
+                  Show more offers
+                </span>
               </Link>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-6">
               {offerListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
@@ -115,13 +122,16 @@ export default function Home() {
                 Recent places for rent
               </h2>
               <Link
-                className="text-sm text-blue-800 hover:underline"
                 to={"/search?type=rent"}
+                className="text-xs sm:text-sm flex justify-left items-center gap-2 my-2"
               >
-                Show more places for rent
+                <FaArrowAltCircleRight className="text-blue-700 hover:font-bold" />
+                <span className=" text-blue-700 hover:underline duration-300 font-bold ">
+                  Show more places for rent
+                </span>
               </Link>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-6">
               {rentListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
@@ -135,13 +145,16 @@ export default function Home() {
                 Recent places for sale
               </h2>
               <Link
-                className="text-sm text-blue-800 hover:underline"
                 to={"/search?type=sale"}
+                className="text-xs sm:text-sm flex justify-left items-center gap-2 my-2"
               >
-                Show more places for sale
+                <FaArrowAltCircleRight className="text-blue-700 hover:font-bold" />
+                <span className=" text-blue-700 hover:underline duration-300 font-bold ">
+                  Show more places for sale
+                </span>
               </Link>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-6">
               {saleListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}

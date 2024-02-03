@@ -6,14 +6,9 @@ import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { useSelector } from "react-redux";
 
-import {
-  FaBath,
-  FaBed,
-  FaChair,
-  FaMapMarkerAlt,
-  FaParking,
-  FaShare,
-} from "react-icons/fa";
+import { FaMapMarkerAlt, FaParking, FaShare } from "react-icons/fa";
+import { IoIosBed } from "react-icons/io";
+import { MdBathroom, MdChair } from "react-icons/md";
 import Contact from "../components/Contact";
 
 export default function Listing() {
@@ -56,7 +51,7 @@ export default function Listing() {
       )}
       {listing && !loading && !error && (
         <div>
-          <Swiper navigation>
+          <Swiper navigation className="max-w-6xl mt-4 rounded-md">
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
@@ -69,9 +64,9 @@ export default function Listing() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
+          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-blue-500 cursor-pointer">
             <FaShare
-              className="text-slate-500"
+              className="text-slate-100"
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
                 setCopied(true);
@@ -82,7 +77,7 @@ export default function Listing() {
             />
           </div>
           {copied && (
-            <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2">
+            <p className="fixed top-[14%] right-[6%] z-10 rounded-md bg-slate-100 p-2 text-blue-500">
               Link copied!
             </p>
           )}
@@ -114,13 +109,13 @@ export default function Listing() {
             </p>
             <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaBed className="text-lg" />
+                <IoIosBed className="text-lg" />
                 {listing.bedrooms > 1
                   ? `${listing.bedrooms} beds `
                   : `${listing.bedrooms} bed `}
               </li>
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaBath className="text-lg" />
+                <MdBathroom className="text-lg" />
                 {listing.bathrooms > 1
                   ? `${listing.bathrooms} baths `
                   : `${listing.bathrooms} bath `}
@@ -130,7 +125,7 @@ export default function Listing() {
                 {listing.parking ? "Parking spot" : "No Parking"}
               </li>
               <li className="flex items-center gap-1 whitespace-nowrap ">
-                <FaChair className="text-lg" />
+                <MdChair className="text-lg" />
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>

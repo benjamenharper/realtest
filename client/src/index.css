@@ -3,5 +3,12 @@
 @tailwind utilities;
 
 body {
-  background-color: rgb(241, 245, 241);
+  background-color: rgb(242, 243, 248);
+}
+* {
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }

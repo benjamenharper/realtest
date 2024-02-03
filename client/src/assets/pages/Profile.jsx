@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 import {
   getDownloadURL,
   getStorage,
@@ -31,6 +32,7 @@ export default function Profile() {
   const dispatch = useDispatch();
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
+  const [showListing, setShowListing] = useState(false);
   const [userListings, setUserListings] = useState([]);
 
   useEffect(() => {
@@ -130,6 +132,7 @@ export default function Profile() {
   };
 
   const handleShowListings = async () => {
+    setShowListing(!showListing);
     try {
       setShowListingsError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
@@ -164,7 +167,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="p-3 max-w-lg mx-auto bg-red min-h-[80vh]">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
@@ -223,7 +226,7 @@ export default function Profile() {
           {loading ? "Loading..." : "Update"}
         </button>
         <Link
-          className=" bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-90"
+          className=" bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-80"
           to="/create-listing"
         >
           Create listing
@@ -231,12 +234,15 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span
-          className="text-red-700 cursor-pointer"
+          className="bg-blue-700 w-[49%] text-white p-3 rounded-lg uppercase text-center hover:opacity-80 cursor-pointer"
           onClick={handleDeleteUser}
         >
           Delete account
         </span>
-        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+        <span
+          onClick={handleSignOut}
+          className="bg-blue-700 w-[49%] text-white p-3 rounded-lg uppercase text-center hover:opacity-80 cursor-pointer"
+        >
           Sign out
         </span>
       </div>
@@ -244,13 +250,17 @@ export default function Profile() {
       <p className=" text-green-700 mt-5">
         {updateSuccess ? "User Updated successfully" : ""}
       </p>
-      <button onClick={handleShowListings} className=" text-green-700  w-full ">
-        Show Listings
+      <button
+        onClick={handleShowListings}
+        className=" text-green-700 mx-auto flex justify-center gap-2 items-center hover:font-bold"
+      >
+        <FaArrowAltCircleRight />
+        <span>Show Listings</span>
       </button>
       <p className=" text-red-700 mt-5">
         {showListingsError ? "Error showing listing" : ""}
       </p>
-      {userListings && userListings.length > 0 && (
+      {userListings && userListings.length && showListing ? (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
@@ -273,21 +283,26 @@ export default function Profile() {
               >
                 <p>{listing.name}</p>
               </Link>
-
               <div className="flex flex-col item-center">
                 <button
                   onClick={() => handleListingDelete(listing._id)}
-                  className="text-red-700 uppercase"
+                  className="text-red-700 hover:font-bold flex justify-center gap-2 items-center"
                 >
-                  Delete
+                  <FaArrowAltCircleRight />
+                  <span>Delete</span>
                 </button>
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <button className="text-green-700 hover:font-bold flex justify-center gap-2 items-center">
+                    <FaArrowAltCircleRight />
+                    <span>Edit</span>
+                  </button>
                 </Link>
               </div>
             </div>
           ))}
         </div>
+      ) : (
+        ""
       )}
     </div>
   );
