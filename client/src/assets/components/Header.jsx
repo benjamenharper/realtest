@@ -49,7 +49,7 @@ export default function Header() {
             <FaSearch className="text-slate-600  " />
           </button>
         </form>
-        <ul className="flex gap-4 ">
+        <ul className="flex gap-1 md:gap-4 ">
           <Link to="/">
             <li className="hidden sm:inline rounded-full bg-slate-700 duration-200 hover:bg-blue-600 px-3 py-1 text-white cursor-pointer">
               Home
@@ -68,7 +68,7 @@ export default function Header() {
                 alt="avatar"
               />
             ) : (
-              <li className="sm:inline rounded-full bg-slate-700 duration-200 hover:bg-blue-600 px-3 py-1 text-white cursor-pointer">
+              <li className="text-[12px] w-[60px] sm:text-[16px] sm:inline rounded-full bg-slate-700 duration-200 hover:bg-blue-600 px-3 py-1 text-white cursor-pointer">
                 Sign In
               </li>
             )}

@@ -1,4 +1,4 @@
-# userAuthentication
+# Real Estate Webb App
 
 ### Table of Contents
 
@@ -121,7 +121,7 @@ after this you can use this file to deploy project on server.
 | | |-- app.js
 | | |-- main.js
 | | |-- index.css
-| |--index.js
+| |--index.html
 
 ```
 
