@@ -23,24 +23,31 @@ import {
 import { useDispatch } from "react-redux";
 
 export default function Profile() {
+  // Ref for file input
   const fileRef = useRef(null);
+  // Redux state selectors
   const { currentUser, loading, error } = useSelector((state) => state.user);
+  // State variables
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const dispatch = useDispatch();
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [showListing, setShowListing] = useState(false);
   const [userListings, setUserListings] = useState([]);
 
+  // Redux dispatch
+  const dispatch = useDispatch();
+
+  // Effect for file upload
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
     }
   }, [file]);
 
+  // Function to handle file upload
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
@@ -66,6 +73,7 @@ export default function Profile() {
     );
   };
 
+  // Function to handle form input change
   const handleChange = (e) => {
     setFormData({
       ...currentUser,
@@ -73,17 +81,22 @@ export default function Profile() {
     });
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/update/${currentUser._id}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await res.json();
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
@@ -97,12 +110,17 @@ export default function Profile() {
     }
   };
 
+  // Function to handle user deletion
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
@@ -115,10 +133,13 @@ export default function Profile() {
     }
   };
 
+  // Function to handle user sign out
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch("/api/auth/signOut");
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/signOut`
+      );
       const data = await res.json();
       //console.log(data);
       if (data.success === false) {
@@ -131,11 +152,15 @@ export default function Profile() {
     }
   };
 
+  // Function to handle showing user listings
   const handleShowListings = async () => {
     setShowListing(!showListing);
     try {
       setShowListingsError(false);
-      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/listings/${currentUser._id}`,
+        { credentials: "include" }
+      );
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
@@ -147,11 +172,16 @@ export default function Profile() {
     }
   };
 
+  // Function to handle listing deletion
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/listing/delete/${listingId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
@@ -200,7 +230,7 @@ export default function Profile() {
           type="text"
           placeholder="username"
           id="username"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg focus:outline-none"
           defaultValue={currentUser.username}
           onChange={handleChange}
         />
@@ -208,7 +238,7 @@ export default function Profile() {
           type="email"
           placeholder="email"
           id="email"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg focus:outline-none"
           defaultValue={currentUser.email}
           onChange={handleChange}
         />
@@ -216,7 +246,7 @@ export default function Profile() {
           type="password"
           placeholder="password"
           id="password"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg focus:outline-none"
           onChange={handleChange}
         />
         <button

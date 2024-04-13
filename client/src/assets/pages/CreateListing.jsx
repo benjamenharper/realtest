@@ -10,8 +10,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
+  // Retrieving currentUser from Redux store
   const { currentUser } = useSelector((state) => state.user);
+  // Creating navigation function using useNavigate hook
   const navigate = useNavigate();
+  // State for storing uploaded files and state for data
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -31,8 +34,8 @@ export default function CreateListing() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log(formData);
 
+  // Function to handle image submission
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
@@ -62,6 +65,7 @@ export default function CreateListing() {
     }
   };
 
+  // Function to upload image to Firebase storage
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -87,6 +91,7 @@ export default function CreateListing() {
     });
   };
 
+  // Function to remove image from form data
   const handleRemoveImage = (index) => {
     setFormData({
       ...formData,
@@ -94,6 +99,7 @@ export default function CreateListing() {
     });
   };
 
+  // Function to handle form input changes
   const handleChange = (e) => {
     if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({
@@ -125,6 +131,7 @@ export default function CreateListing() {
     }
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -134,16 +141,20 @@ export default function CreateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch("/api/listing/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          userRef: currentUser._id,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/listing/create`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            userRef: currentUser._id,
+          }),
+        }
+      );
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {
@@ -168,7 +179,7 @@ export default function CreateListing() {
           <input
             type="text"
             placeholder="Name"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg focus:outline-none"
             id="name"
             maxLength="62"
             minLength="10"
@@ -179,7 +190,7 @@ export default function CreateListing() {
           <textarea
             type="text"
             placeholder="Description"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg focus:outline-none"
             id="description"
             required
             onChange={handleChange}
@@ -188,7 +199,7 @@ export default function CreateListing() {
           <input
             type="text"
             placeholder="Address"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg focus:outline-none"
             id="address"
             required
             onChange={handleChange}
@@ -201,7 +212,7 @@ export default function CreateListing() {
                   type="checkbox"
                   id="sale"
                   name="sale"
-                  className="w-5 cursor-pointer"
+                  className="w-5 cursor-pointer focus:outline-none"
                   onChange={handleChange}
                   checked={formData.type === "sale"}
                 />
@@ -214,7 +225,7 @@ export default function CreateListing() {
                   type="checkbox"
                   id="rent"
                   name="rent"
-                  className="w-5 cursor-pointer"
+                  className="w-5 cursor-pointer focus:outline-none"
                   onChange={handleChange}
                   checked={formData.type === "rent"}
                 />
@@ -227,7 +238,7 @@ export default function CreateListing() {
                   type="checkbox"
                   id="parking"
                   name="parking"
-                  className="w-5 cursor-pointer"
+                  className="w-5 cursor-pointer focus:outline-none"
                   onChange={handleChange}
                   checked={formData.parking}
                 />
@@ -240,7 +251,7 @@ export default function CreateListing() {
                   type="checkbox"
                   id="furnished"
                   name="furnished"
-                  className="w-5 cursor-pointer"
+                  className="w-5 cursor-pointer focus:outline-none"
                   onChange={handleChange}
                   checked={formData.furnished}
                 />
@@ -252,7 +263,7 @@ export default function CreateListing() {
                 <input
                   type="checkbox"
                   id="offer"
-                  className="w-5 cursor-pointer"
+                  className="w-5 cursor-pointer focus:outline-none"
                   name="offer"
                   onChange={handleChange}
                   checked={formData.offer}
@@ -270,7 +281,7 @@ export default function CreateListing() {
                   min="1"
                   max="10"
                   required
-                  className="p-3 border border-gray-300 rounded-lg"
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-none"
                   onChange={handleChange}
                   value={formData.bedrooms}
                 />
@@ -283,7 +294,7 @@ export default function CreateListing() {
                   min="1"
                   max="10"
                   required
-                  className="p-3 border border-gray-300 rounded-lg"
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-none"
                   onChange={handleChange}
                   value={formData.bathrooms}
                 />
@@ -296,7 +307,7 @@ export default function CreateListing() {
                   min="50"
                   max="10000000"
                   required
-                  className="p-3 border border-gray-300 rounded-lg"
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-none"
                   onChange={handleChange}
                   value={formData.regularPrice}
                 />
@@ -315,7 +326,7 @@ export default function CreateListing() {
                     min="0"
                     max="10000000"
                     required
-                    className="p-3 border border-gray-300 rounded-lg"
+                    className="p-3 border border-gray-300 rounded-lg focus:outline-none"
                     onChange={handleChange}
                     value={formData.discountPrice}
                   />
@@ -340,7 +351,7 @@ export default function CreateListing() {
           <div className="flex gap-4">
             <input
               onChange={(e) => setFiles(e.target.files)}
-              className="p-3 border border-gray-300 rounded w-full"
+              className="p-3 border border-gray-300 rounded w-full focus:outline-none"
               type="file"
               id="images"
               accept="image/*"

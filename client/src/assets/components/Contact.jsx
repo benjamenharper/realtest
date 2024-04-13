@@ -9,12 +9,16 @@ export default function Contact({ listing }) {
     setMessage(e.target.value);
   };
 
-  //console.log(listing);
-
+  // Fetching landlord data when component mounts or listing userRef changes
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-        const res = await fetch(`/api/user/${listing.userRef}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${listing.userRef}`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         setLandlord(data);
       } catch (error) {
@@ -39,7 +43,7 @@ export default function Contact({ listing }) {
             value={message}
             onChange={onChange}
             placeholder="Enter your message here..."
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-3 rounded-lg focus:outline-none"
           ></textarea>
 
           <Link

@@ -4,6 +4,7 @@ import ListingItem from "../components/ListingItem";
 
 export default function Search() {
   const navigate = useNavigate();
+  // State for sidebar data
   const [sidebardata, setSidebardata] = useState({
     searchTerm: "",
     type: "all",
@@ -19,6 +20,7 @@ export default function Search() {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
+    // Fetching listings when component mounts or search parameters change
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
     const typeFromUrl = urlParams.get("type");
@@ -51,7 +53,9 @@ export default function Search() {
     const fetchListings = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/listing/get?${searchQuery}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/listing/get?${searchQuery}`
+      );
       const data = await res.json();
       if (data.length > 8) {
         setShowMore(true);
@@ -65,6 +69,7 @@ export default function Search() {
     fetchListings();
   }, [location.search]);
 
+  // Handling changes in sidebar inputs
   const handleChange = (e) => {
     if (
       e.target.id === "all" ||
@@ -99,6 +104,7 @@ export default function Search() {
     }
   };
 
+  // Handling form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
@@ -113,13 +119,16 @@ export default function Search() {
     navigate(`/search?${searchQuery}`);
   };
 
+  // Handling "Show more" button click
   const onShowMoreClick = async () => {
     const numberOfListings = listings.length;
     const startIndex = numberOfListings;
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/listing/get?${searchQuery}`
+    );
     const data = await res.json();
     if (data.length < 9) {
       setShowMore(false);

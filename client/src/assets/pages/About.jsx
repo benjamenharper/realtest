@@ -1,10 +1,12 @@
+import eliteStateImage from "./../../../public/eliteState.png";
+
 export default function About() {
   return (
     <div className="py-20 px-4 max-w-6xl mx-auto min-h-[80vh] ">
       <img
         className="mx-auto mb-4
       "
-        src="./../../../public/eliteState.png"
+        src={eliteStateImage}
         alt="elite estate solutions"
       />
       <h1 className="text-3xl font-bold mb-4 text-slate-800">

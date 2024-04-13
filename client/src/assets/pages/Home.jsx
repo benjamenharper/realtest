@@ -8,40 +8,50 @@ import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
 
 export default function Home() {
+  // States for different types of listings
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
+  // Initialize Swiper navigation module
   SwiperCore.use([Navigation]);
 
+  // Initial fetch for offer listings
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const res = await fetch("/api/listing/get?offer=true&limit=6");
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/listing/get?offer=true&limit=6`
+        );
         const data = await res.json();
         setOfferListings(data);
+        // Initial fetch for offer listings
         fetchRentListings();
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
     const fetchRentListings = async () => {
       try {
-        const res = await fetch("/api/listing/get?type=rent&limit=6");
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/listing/get?type=rent&limit=6`
+        );
         const data = await res.json();
         setRentListings(data);
         fetchSaleListings();
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
 
     const fetchSaleListings = async () => {
       try {
-        const res = await fetch("/api/listing/get?type=sale&limit=6");
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/listing/get?type=sale&limit=6`
+        );
         const data = await res.json();
         setSaleListings(data);
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
     fetchOfferListings();
@@ -108,7 +118,7 @@ export default function Home() {
                 </span>
               </Link>
             </div>
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-6 ">
               {offerListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}

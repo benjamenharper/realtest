@@ -4,11 +4,13 @@ import Oath from "../components/Oath";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 
 export default function SignUp() {
+  // State variables
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Function to handle form input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -16,17 +18,21 @@ export default function SignUp() {
     });
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch("/api/auth/signUp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/signUp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await res.json();
       if (data.success === false) {
         setError(data.message);
@@ -48,21 +54,21 @@ export default function SignUp() {
         <input
           type="text"
           placeholder="username"
-          className="border p-3 rounded-lg "
+          className="border p-3 rounded-lg focus:outline-none"
           id="username"
           onChange={handleChange}
         />
         <input
           type="email"
           placeholder="email"
-          className="border p-3 rounded-lg "
+          className="border p-3 rounded-lg focus:outline-none"
           id="email"
           onChange={handleChange}
         />
         <input
           type="password"
           placeholder="password"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg focus:outline-none"
           id="password"
           autoComplete="on"
           onChange={handleChange}

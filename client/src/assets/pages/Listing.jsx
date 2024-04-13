@@ -12,7 +12,9 @@ import { MdBathroom, MdChair } from "react-icons/md";
 import Contact from "../components/Contact";
 
 export default function Listing() {
+  // Initializing Swiper navigation
   SwiperCore.use([Navigation]);
+  //states
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -21,11 +23,15 @@ export default function Listing() {
   const { currentUser } = useSelector((state) => state.user);
   const [contact, setContact] = useState(false);
 
+  // Fetching listing data when component mounts or route parameter changes
   useEffect(() => {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/listing/get/${params.listingId}`,
+          { credentials: "include" }
+        );
         const data = await res.json();
         if (data.success === false) {
           setError(true);
@@ -45,9 +51,13 @@ export default function Listing() {
 
   return (
     <main>
-      {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
+      {loading && (
+        <p className="text-center my-7 text-2xl h-screen">Loading...</p>
+      )}
       {error && (
-        <p className="text-center my-7 text-2xl">Something went wrong!</p>
+        <p className="text-center my-7 text-2xl h-screen">
+          Something went wrong!
+        </p>
       )}
       {listing && !loading && !error && (
         <div>

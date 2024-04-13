@@ -5,9 +5,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Footer() {
+  // Extracting currentUser from Redux store state
   const { currentUser } = useSelector((state) => state.user);
-
-  console.log(currentUser);
 
   return (
     <footer className="bg-slate-200 shadow-md ">
