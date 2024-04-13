@@ -68,7 +68,7 @@ Image Management:
 ### Links
 
 - Solution URL: [Add solution URL here](https://github.com/DavitDvalashvili/real-estate-web-app)
-- Live Site URL: [Add live site URL here](https://real-estate-web-app-j262.onrender.com/)
+- Live Site URL: [Add live site URL here](https://real-estate-web-app-client.vercel.app)
 
 ### Getting Started
 
