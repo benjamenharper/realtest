@@ -23,7 +23,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: `https://newestate-front.vercel.app`,
+    origin: `https://real-estate-web-app-client.vercel.app`,
     credentials: true,
     exposedHeaders: ["Set-Cookie"],
   })
