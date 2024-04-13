@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the listing schema
 const listingSchema = new mongoose.Schema(
   {
     name: {
@@ -50,14 +51,16 @@ const listingSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    // Reference to the user who owns the listing
     userRef: {
       type: String,
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true } // Automatically add createdAt and updatedAt timestamps
 );
 
+// Create Listing model based on listing schema
 const Listing = mongoose.model("Listing", listingSchema);
 
 export default Listing;
