@@ -9,35 +9,29 @@ export default function Footer() {
   const { currentUser } = useSelector((state) => state.user);
 
   return (
-    <footer className="bg-slate-200 shadow-md ">
+    <footer className="bg-gray-50">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-6">
         <Link to="/">
-          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap ">
-            <span className="text-slate-700">Elite&nbsp;Estate&nbsp;</span>
-            <span className="text-blue-600">Solutions</span>
+          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap items-center">
+            <span className="text-slate-700">Hawaii Elite </span>
+            <span className="text-blue-600"> Real Estate</span>
           </h1>
         </Link>
         <ul className="flex gap-4 flex-col">
           <Link to="/">
-            <li className="  text-slate-700 hover:text-blue-500  duration-200 font-bold cursor-pointer">
+            <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium cursor-pointer">
               Home
             </li>
           </Link>
           <Link to="/about">
-            <li className=" text-slate-700 duration-200 hover:text-blue-500 font-bold cursor-pointer">
+            <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium cursor-pointer">
               About
             </li>
           </Link>
           <Link to="/profile">
-            {currentUser ? (
-              <li className="sm:inline text-slate-700 duration-200 hover:text-blue-500 font-bold cursor-pointer">
-                Profile
-              </li>
-            ) : (
-              <li className="sm:inline text-slate-700 duration-200 hover:text-blue-500 font-bold cursor-pointer">
-                Sign In
-              </li>
-            )}
+            <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium cursor-pointer">
+              {currentUser ? 'Profile' : 'Sign in'}
+            </li>
           </Link>
         </ul>
         <ul className="flex gap-4 flex-col">

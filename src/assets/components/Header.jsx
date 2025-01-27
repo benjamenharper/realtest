@@ -1,4 +1,4 @@
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -31,12 +31,13 @@ export default function Header() {
   }, [location.search]);
 
   return (
-    <header className="bg-slate-200 shadow-md  shadow-slate-500">
+    <header className="bg-gray-50">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-6">
         <Link to="/">
-          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap ">
-            <span className="text-slate-700">Elite&nbsp;Estate&nbsp;</span>
-            <span className="text-blue-600">Solutions</span>
+          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap items-center">
+            <span className="text-slate-700">Hawaii Elite </span>
+            <FaHome className="mx-1 text-blue-600" />
+            <span className="text-blue-600"> Real Estate</span>
           </h1>
         </Link>
 
@@ -55,27 +56,25 @@ export default function Header() {
             <FaSearch className="text-slate-600  " />
           </button>
         </form>
-        <ul className="flex gap-1 md:gap-4 ">
+        <ul className="flex gap-4">
           <Link to="/">
-            <li className="hidden sm:inline rounded-full bg-slate-700 duration-200 hover:bg-blue-600 px-3 py-1 text-white cursor-pointer">
+            <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
               Home
             </li>
           </Link>
           <Link to="/about">
-            <li className="hidden sm:inline rounded-full bg-slate-700 duration-200 hover:bg-blue-600 px-3 py-1 text-white cursor-pointer">
+            <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
               About
             </li>
           </Link>
           <Link to="/profile">
             {currentUser ? (
-              <img
-                className=" rounded-full ml-6 h-8 w-8 object-cover"
-                src={currentUser.avatar}
-                alt="avatar"
-              />
+              <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium">
+                Profile
+              </li>
             ) : (
-              <li className="px-3 w-[60.42px] text-[12px] sm:text-[16px] sm:inline rounded-full bg-slate-700 duration-200 hover:bg-blue-600 py-1 text-white cursor-pointer">
-                Sign In
+              <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium">
+                Sign in
               </li>
             )}
           </Link>
