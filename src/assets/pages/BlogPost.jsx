@@ -37,7 +37,7 @@ export default function BlogPost() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-6">
         <div className="text-center">Loading...</div>
       </div>
     );
@@ -48,7 +48,7 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6">
       {/* Featured Image */}
       {post.featuredImage && (
         <div className="relative h-64 md:h-96 w-full mb-6">
