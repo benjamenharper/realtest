@@ -52,30 +52,34 @@ export default function Header() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="bg-blue-50">
-            <FaSearch className="text-slate-600  " />
+          <button>
+            <FaSearch className="text-slate-600" />
           </button>
         </form>
+
         <ul className="flex gap-4">
-          <Link to="/">
+          <Link to="/search">
             <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
-              Home
-            </li>
-          </Link>
-          <Link to="/about">
-            <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
-              About
+              Properties
             </li>
           </Link>
           <Link to="/blog">
             <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
-              Blog
+              News
             </li>
           </Link>
           <Link to="/profile">
             {currentUser ? (
               <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium">
-                Profile
+                {currentUser.avatar ? (
+                  <img
+                    className="rounded-full h-7 w-7 object-cover"
+                    src={currentUser.avatar}
+                    alt="profile"
+                  />
+                ) : (
+                  "Profile"
+                )}
               </li>
             ) : (
               <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium">
