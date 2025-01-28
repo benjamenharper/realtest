@@ -1,7 +1,54 @@
 import axios from 'axios';
 
-const REDFIN_API_KEY = '72b25b9609mshf22de8083b9ef4bp18d5b9jsn2b059ddfdc06';
-const REDFIN_API_HOST = 'redfin-com-data.p.rapidapi.com';
+const REDFIN_API_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
+const REDFIN_API_HOST = import.meta.env.VITE_RAPIDAPI_HOST;
+
+// Mock data for development
+const mockProperties = [
+  {
+    propertyId: '1',
+    streetAddress: '91-1000 Kamaaha Avenue',
+    city: 'Kapolei',
+    state: 'HI',
+    zipCode: '96707',
+    price: 750000,
+    beds: 3,
+    baths: 2,
+    sqFt: 1500,
+    lotSize: '5,000 sqft',
+    yearBuilt: '2020',
+    propertyType: 'Single Family',
+    mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/373/genMid.PW23015373_0.jpg',
+    description: 'Beautiful single family home in Kapolei',
+    features: ['Central AC', 'Garage', 'Lanai'],
+    latitude: 21.3469,
+    longitude: -158.0500,
+    status: 'SOLD',
+    soldDate: '2024-12-15',
+    soldPrice: 745000
+  },
+  {
+    propertyId: '2',
+    streetAddress: '92-1234 Olani Street',
+    city: 'Kapolei',
+    state: 'HI',
+    zipCode: '96707',
+    price: 850000,
+    beds: 4,
+    baths: 3,
+    sqFt: 1800,
+    lotSize: '6,000 sqft',
+    yearBuilt: '2021',
+    mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/374/genMid.PW23015374_0.jpg',
+    description: 'Spacious family home with mountain views',
+    features: ['Split AC', 'Double Garage', 'Solar Panels'],
+    latitude: 21.3400,
+    longitude: -158.0520,
+    status: 'SOLD',
+    soldDate: '2024-12-20',
+    soldPrice: 840000
+  }
+];
 
 const redfinApi = axios.create({
   baseURL: 'https://redfin-com-data.p.rapidapi.com',
@@ -12,6 +59,12 @@ const redfinApi = axios.create({
 });
 
 export async function fetchSoldProperties(regionId = '6_2446', soldWithin = '30') {
+  // Use mock data in development or if API key is not available
+  if (import.meta.env.DEV || !REDFIN_API_KEY) {
+    console.log('Using mock data for development');
+    return { properties: mockProperties };
+  }
+
   try {
     console.log('Fetching sold properties...');
     const response = await redfinApi.get('/properties/search-sold', {
@@ -58,6 +111,13 @@ export async function fetchSoldProperties(regionId = '6_2446', soldWithin = '30'
       response: error.response?.data,
       status: error.response?.status
     });
+    
+    if (error.response?.status === 403) {
+      // Fallback to mock data if API access is denied
+      console.log('API access denied, using mock data');
+      return { properties: mockProperties };
+    }
+    
     throw error;
   }
 }
@@ -101,7 +161,7 @@ export function processPropertyData(property) {
       propertyType: property.propertyType || ''
     },
     images: Array.isArray(property.photos) ? property.photos : 
-            property.photos ? [property.photos] : 
+            property.mainImageUrl ? [property.mainImageUrl] : 
             ['https://via.placeholder.com/800x600.png?text=No+Image+Available'],
     description: property.description || '',
     features: Array.isArray(property.features) ? property.features : [],
