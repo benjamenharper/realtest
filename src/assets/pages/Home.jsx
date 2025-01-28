@@ -65,7 +65,7 @@ export default function Home() {
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
           Find Your <span className="text-orange-500">Hawaii</span> Home
           <br />
-          <span className="text-blue-500">in A Breeze</span>
+          <span className="text-blue-500">In A Breeze</span>
         </h1>
         <div className="text-gray-400 text-xs sm:text-sm">
           Experience the essence of island living with Hawaii Elite Real Estate.
