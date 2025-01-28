@@ -60,31 +60,31 @@ export default function Blog() {
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setContentType('all')}
-            className={\`px-4 py-2 rounded-lg \${
+            className={`px-4 py-2 rounded-lg ${
               contentType === 'all'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }\`}
+            }`}
           >
             All Content
           </button>
           <button
             onClick={() => setContentType('post')}
-            className={\`px-4 py-2 rounded-lg \${
+            className={`px-4 py-2 rounded-lg ${
               contentType === 'post'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }\`}
+            }`}
           >
             Articles
           </button>
           <button
             onClick={() => setContentType('page')}
-            className={\`px-4 py-2 rounded-lg \${
+            className={`px-4 py-2 rounded-lg ${
               contentType === 'page'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }\`}
+            }`}
           >
             Pages
           </button>
@@ -96,11 +96,11 @@ export default function Blog() {
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setSelectedCategory('all')}
-            className={\`px-4 py-2 rounded-lg \${
+            className={`px-4 py-2 rounded-lg ${
               selectedCategory === 'all'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }\`}
+            }`}
           >
             All Categories
           </button>
@@ -108,11 +108,11 @@ export default function Blog() {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id.toString())}
-              className={\`px-4 py-2 rounded-lg \${
+              className={`px-4 py-2 rounded-lg ${
                 selectedCategory === category.id.toString()
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }\`}
+              }`}
             >
               {category.name}
             </button>

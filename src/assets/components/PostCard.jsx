@@ -26,11 +26,7 @@ export default function PostCard({ post }) {
           </div>
         )}
         <div className="flex items-center gap-2 mb-2">
-          <span className={`text-xs px-2 py-1 rounded-full ${
-            post.type === 'post'
-              ? 'bg-blue-50 text-blue-600'
-              : 'bg-purple-50 text-purple-600'
-          }`}>
+          <span className={`text-xs px-2 py-1 rounded-full ${post.type === 'post' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'}`}>
             {post.type === 'post' ? 'Article' : 'Page'}
           </span>
           <span className="text-sm text-gray-500">{post.date}</span>
