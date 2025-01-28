@@ -1,3 +1,4 @@
+// Version 0.0.2 - Latest deployment
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./assets/pages/Home";
 import About from "./assets/pages/About";
