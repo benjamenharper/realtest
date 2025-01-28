@@ -73,7 +73,7 @@ export default function PropertiesForSale() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Properties For Sale</h2>
         <Link 
-          to="/search?type=sale" 
+          to="/properties?status=sale" 
           className="text-blue-600 hover:text-blue-800 text-sm font-medium"
         >
           View all properties →

@@ -15,6 +15,7 @@ import BlogPost from "./assets/pages/BlogPost";
 import Services from "./assets/pages/Services";
 import WordPressPage from "./assets/pages/WordPressPage";
 import PropertyDetail from "./assets/pages/PropertyDetail";
+import Properties from "./assets/pages/Properties";
 import Footer from "./assets/components/Footer";
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/listing/:listingId" element={<Listing />} />
         <Route path="/property/:propertyId" element={<PropertyDetail />} />
+        <Route path="/properties" element={<Properties />} />
 
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
