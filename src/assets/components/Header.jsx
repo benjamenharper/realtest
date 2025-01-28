@@ -1,4 +1,4 @@
-import { FaSearch, FaHome } from "react-icons/fa";
+import { FaSearch, FaHome, FaPhone } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -33,13 +33,19 @@ export default function Header() {
   return (
     <header className="bg-gray-50 border-b border-gray-200">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-6">
-        <Link to="/">
-          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap items-center">
-            <span className="text-slate-700">Hawaii Elite </span>
-            <FaHome className="mx-1 text-blue-600" />
-            <span className="text-blue-600"> Real Estate</span>
-          </h1>
-        </Link>
+        <div className="flex items-center gap-8">
+          <Link to="/">
+            <h1 className="font-bold text-sm sm:text-xl flex flex-wrap items-center">
+              <span className="text-slate-700">Hawaii Elite </span>
+              <FaHome className="mx-1 text-blue-600" />
+              <span className="text-blue-600"> Real Estate</span>
+            </h1>
+          </Link>
+          <div className="hidden lg:flex items-center text-blue-600 gap-2">
+            <FaPhone className="text-sm" />
+            <span className="text-sm font-medium">808-866-6593</span>
+          </div>
+        </div>
 
         <form
           onSubmit={handleSubmit}
@@ -61,6 +67,11 @@ export default function Header() {
           <Link to="/search">
             <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
               Properties
+            </li>
+          </Link>
+          <Link to="/services">
+            <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
+              Services
             </li>
           </Link>
           <Link to="/blog">
