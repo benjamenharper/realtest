@@ -24,7 +24,7 @@ export default function Header() {
         </div>
 
         <ul className="flex gap-4">
-          <Link to="/search">
+          <Link to="/properties">
             <li className="hidden sm:inline text-slate-700 hover:text-blue-600 duration-200 font-medium">
               Properties
             </li>

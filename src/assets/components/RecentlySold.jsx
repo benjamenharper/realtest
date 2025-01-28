@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchSoldProperties, processPropertyData } from '../../utils/redfin';
+import { fetchRecentlySold, processPropertyData } from '../../utils/redfin';
 import { FaBed, FaBath, FaRuler } from 'react-icons/fa';
 
 export default function RecentlySold() {
@@ -13,7 +13,7 @@ export default function RecentlySold() {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchSoldProperties();
+        const data = await fetchRecentlySold();
         console.log('Fetched data:', data);
         
         if (!data || !data.properties) {
@@ -24,7 +24,7 @@ export default function RecentlySold() {
         console.log('Processed data:', processedData);
         setProperties(processedData);
       } catch (err) {
-        console.error('Error loading sold properties:', err);
+        console.error('Error loading recently sold properties:', err);
         setError(err.message || 'Failed to load recently sold properties');
       } finally {
         setLoading(false);

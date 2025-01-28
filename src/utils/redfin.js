@@ -14,16 +14,21 @@ const mockPropertiesForSale = [
     price: 980000,
     beds: 4,
     baths: 3,
-    sqFt: 2100,
+    sqft: 2100,
     lotSize: '6,500 sqft',
     yearBuilt: '2022',
     propertyType: 'Single Family',
     mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/375/genMid.PW23015375_0.jpg',
+    photos: [
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/375/genMid.PW23015375_0.jpg',
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/375/genMid.PW23015375_1.jpg'
+    ],
     description: 'Modern home with ocean views',
     features: ['Central AC', 'Double Garage', 'Solar', 'Pool'],
     latitude: 21.3410,
     longitude: -158.0530,
-    status: 'FOR_SALE'
+    status: 'FOR_SALE',
+    daysOnMarket: 15
   },
   {
     propertyId: '4',
@@ -34,16 +39,21 @@ const mockPropertiesForSale = [
     price: 1250000,
     beds: 5,
     baths: 4,
-    sqFt: 2800,
+    sqft: 2800,
     lotSize: '8,000 sqft',
     yearBuilt: '2023',
     propertyType: 'Single Family',
     mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_0.jpg',
+    photos: [
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_0.jpg',
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_1.jpg'
+    ],
     description: 'Luxury home in Ko Olina',
     features: ['Central AC', 'Triple Garage', 'Solar', 'Pool', 'Golf Course View'],
     latitude: 21.3420,
     longitude: -158.0540,
-    status: 'FOR_SALE'
+    status: 'FOR_SALE',
+    daysOnMarket: 7
   }
 ];
 
@@ -57,18 +67,23 @@ const mockSoldProperties = [
     price: 750000,
     beds: 3,
     baths: 2,
-    sqFt: 1500,
+    sqft: 1500,
     lotSize: '5,000 sqft',
     yearBuilt: '2020',
     propertyType: 'Single Family',
     mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/373/genMid.PW23015373_0.jpg',
+    photos: [
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/373/genMid.PW23015373_0.jpg',
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/373/genMid.PW23015373_1.jpg'
+    ],
     description: 'Beautiful single family home in Kapolei',
     features: ['Central AC', 'Garage', 'Lanai'],
     latitude: 21.3469,
     longitude: -158.0500,
     status: 'SOLD',
     soldDate: '2024-12-15',
-    soldPrice: 745000
+    soldPrice: 745000,
+    daysOnMarket: 45
   },
   {
     propertyId: '2',
@@ -79,17 +94,23 @@ const mockSoldProperties = [
     price: 850000,
     beds: 4,
     baths: 3,
-    sqFt: 1800,
+    sqft: 1800,
     lotSize: '6,000 sqft',
     yearBuilt: '2021',
+    propertyType: 'Single Family',
     mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/374/genMid.PW23015374_0.jpg',
+    photos: [
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/374/genMid.PW23015374_0.jpg',
+      'https://ssl.cdn-redfin.com/photo/169/mbphoto/374/genMid.PW23015374_1.jpg'
+    ],
     description: 'Spacious family home with mountain views',
     features: ['Split AC', 'Double Garage', 'Solar Panels'],
     latitude: 21.3400,
     longitude: -158.0520,
     status: 'SOLD',
     soldDate: '2024-12-20',
-    soldPrice: 840000
+    soldPrice: 840000,
+    daysOnMarket: 30
   }
 ];
 
@@ -127,7 +148,7 @@ export async function fetchPropertiesForSale(regionId = '6_2446') {
         streetAddress: property.address || '',
         city: property.city || '',
         state: property.state || 'HI',
-        zipcode: property.zipCode || '',
+        zipCode: property.zipCode || '',
         price: property.price || 0,
         beds: property.beds || 0,
         baths: property.baths || 0,
@@ -140,7 +161,8 @@ export async function fetchPropertiesForSale(regionId = '6_2446') {
         features: property.features || [],
         latitude: property.latitude || null,
         longitude: property.longitude || null,
-        status: 'FOR_SALE'
+        status: 'FOR_SALE',
+        daysOnMarket: property.daysOnMarket || 0
       }))
     };
   } catch (error) {
@@ -160,7 +182,7 @@ export async function fetchPropertiesForSale(regionId = '6_2446') {
   }
 }
 
-export async function fetchSoldProperties(regionId = '6_2446', soldWithin = '30') {
+export async function fetchRecentlySold(regionId = '6_2446', soldWithin = '30') {
   // Use mock data in development or if API key is not available
   if (import.meta.env.DEV || !REDFIN_API_KEY) {
     console.log('Using mock data for sold properties');
@@ -189,7 +211,7 @@ export async function fetchSoldProperties(regionId = '6_2446', soldWithin = '30'
         streetAddress: property.address || '',
         city: property.city || '',
         state: property.state || 'HI',
-        zipcode: property.zipCode || '',
+        zipCode: property.zipCode || '',
         price: property.price || 0,
         beds: property.beds || 0,
         baths: property.baths || 0,
@@ -203,8 +225,9 @@ export async function fetchSoldProperties(regionId = '6_2446', soldWithin = '30'
         latitude: property.latitude || null,
         longitude: property.longitude || null,
         status: 'SOLD',
-        lastSoldDate: property.soldDate || null,
-        soldPrice: property.soldPrice || property.price || 0
+        soldDate: property.soldDate || null,
+        soldPrice: property.soldPrice || property.price || 0,
+        daysOnMarket: property.daysOnMarket || 0
       }))
     };
   } catch (error) {
@@ -246,8 +269,8 @@ export function processPropertyData(property) {
       street: property.streetAddress || '',
       city: property.city || '',
       state: property.state || 'HI',
-      zipcode: property.zipcode || '',
-      full: `${property.streetAddress || ''}, ${property.city || ''}, ${property.state || 'HI'} ${property.zipcode || ''}`
+      zipcode: property.zipCode || '',
+      full: `${property.streetAddress || ''}, ${property.city || ''}, ${property.state || 'HI'} ${property.zipCode || ''}`
     },
     price: {
       current: property.price || 0,
@@ -273,6 +296,6 @@ export function processPropertyData(property) {
     },
     status: property.status || 'FOR_SALE',
     daysOnMarket: property.daysOnMarket || 0,
-    lastSold: property.lastSoldDate || null
+    lastSold: property.soldDate || null
   };
 }
