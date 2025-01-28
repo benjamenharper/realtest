@@ -63,24 +63,18 @@ export default function Home() {
     <div className="min-h-[80vh]">
       <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-blue-700">perfect</span>
-          <br />
-          place with ease
+          Find Your Hawaii Home <span className="text-slate-500">in A Breeze</span>
         </h1>
         <div className="text-gray-400 text-xs sm:text-sm">
-          Elite Estate Solutions is the best place to find your next perfect
-          place to live.
+          Experience the essence of island living with Hawaii Elite Real Estate.
           <br />
-          We have a wide range of properties for you to choose from.
+          Your dream home in paradise awaits.
         </div>
         <Link
           to={"/search"}
-          className="text-xs sm:text-sm flex justify-left items-center gap-2"
+          className="text-xs sm:text-sm text-blue-800 font-bold hover:underline"
         >
-          <FaArrowAltCircleRight className="text-blue-700 hover:font-bold" />
-          <span className=" text-blue-700 hover:underline duration-300 font-bold ">
-            Let`s get started...
-          </span>
+          Start your journey home...
         </Link>
       </div>
       {/* swiper */}
