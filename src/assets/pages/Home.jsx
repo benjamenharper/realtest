@@ -61,7 +61,7 @@ export default function Home() {
 
   return (
     <div className="min-h-[80vh]">
-      <div className="flex flex-col gap-6 p-28 pl-12 pr-3 max-w-6xl mx-auto">
+      <div className="flex flex-col gap-6 p-28 px-6 max-w-6xl mx-auto">
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
           Find Your <span className="text-orange-500">Hawaii</span> Home
           <br />
