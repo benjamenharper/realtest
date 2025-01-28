@@ -42,7 +42,8 @@ function processContent(item) {
       name: cat.name,
       slug: cat.slug
     })),
-    type: item.type || 'post'
+    type: item.type || 'post',
+    link: item.link ? new URL(item.link).pathname : null // Extract pathname from WordPress URL
   };
 }
 
@@ -99,28 +100,32 @@ export async function fetchContentBySlug(slug) {
 
 export async function fetchRelatedPosts(currentSlug, postType = 'post', limit = 3) {
   try {
-    // Fetch current post to get its categories
-    const currentPost = await fetchContentBySlug(currentSlug);
+    // Get all posts
+    const allPosts = await fetchPosts();
+    
+    // Find the current post to get its categories
+    const currentPost = allPosts.find(post => post.slug === currentSlug);
     if (!currentPost) return [];
 
-    // Get category IDs from the current post
-    const categoryIds = currentPost.categories.map(cat => cat.id);
-    if (categoryIds.length === 0) return [];
+    // Get category IDs of the current post
+    const currentCategories = currentPost.categories.map(cat => cat.id);
 
-    // Fetch posts in the same categories, excluding the current post
-    const params = {
-      categories: categoryIds.join(','),
-      exclude: currentPost.id.toString(),
-      per_page: limit + 1, // Fetch one extra to ensure we have enough after filtering
-    };
-
-    const relatedPosts = await fetchFromAPI(postType === 'post' ? 'posts' : 'pages', params);
-    
-    // Process and return related posts, excluding the current one
-    return relatedPosts
-      .map(processContent)
-      .filter(post => post.slug !== currentSlug)
+    // Filter and sort related posts
+    const relatedPosts = allPosts
+      .filter(post => 
+        post.slug !== currentSlug && // Exclude current post
+        post.type === postType && // Match post type
+        post.categories.some(cat => currentCategories.includes(cat.id)) // Must share at least one category
+      )
+      .sort((a, b) => {
+        // Count matching categories
+        const aMatches = a.categories.filter(cat => currentCategories.includes(cat.id)).length;
+        const bMatches = b.categories.filter(cat => currentCategories.includes(cat.id)).length;
+        return bMatches - aMatches; // Sort by most categories in common
+      })
       .slice(0, limit);
+
+    return relatedPosts;
   } catch (error) {
     console.error('Error fetching related posts:', error);
     return [];

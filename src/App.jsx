@@ -13,6 +13,7 @@ import Search from "./assets/pages/Search";
 import Blog from "./assets/pages/Blog";
 import BlogPost from "./assets/pages/BlogPost";
 import Services from "./assets/pages/Services";
+import WordPressPage from "./assets/pages/WordPressPage";
 import Footer from "./assets/components/Footer";
 
 export default function App() {
@@ -20,15 +21,16 @@ export default function App() {
     <BrowserRouter>
       <Header />
       <Routes>
+        {/* Static Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/about" element={<About />} />
         <Route path="/search" element={<Search />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/:slug" element={<BlogPost />} />
         <Route path="/listing/:listingId" element={<Listing />} />
+
+        {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-listing" element={<CreateListing />} />
@@ -37,6 +39,10 @@ export default function App() {
             element={<UpdateListing />}
           />
         </Route>
+
+        {/* WordPress Content Routes */}
+        <Route path="/page/:slug" element={<WordPressPage />} /> {/* WordPress Pages */}
+        <Route path="/:slug" element={<BlogPost />} /> {/* WordPress Posts */}
       </Routes>
       <Footer />
     </BrowserRouter>
