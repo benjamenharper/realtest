@@ -6,6 +6,7 @@ import SwiperCore from "swiper";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
+import RecentlySold from '../components/RecentlySold';
 
 export default function Home() {
   // States for different types of listings
@@ -172,6 +173,9 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Recently Sold Section */}
+      <RecentlySold />
     </div>
   );
 }
