@@ -16,6 +16,7 @@ import Services from "./assets/pages/Services";
 import WordPressPage from "./assets/pages/WordPressPage";
 import PropertyDetail from "./assets/pages/PropertyDetail";
 import Properties from "./assets/pages/Properties";
+import IslandProperties from "./assets/pages/IslandProperties"; // Added import statement
 import Footer from "./assets/components/Footer";
 
 export default function App() {
@@ -31,6 +32,8 @@ export default function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/services" element={<Services />} />
         <Route path="/listing/:listingId" element={<Listing />} />
+        <Route path="/properties" element={<Properties />} />
+        <Route path="/properties/:islandSlug" element={<IslandProperties />} />
         <Route path="/property/:propertyId" element={<PropertyDetail />} />
         <Route path="/properties" element={<Properties />} />
 

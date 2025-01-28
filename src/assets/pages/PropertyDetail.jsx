@@ -1,237 +1,259 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
-import { Navigation } from 'swiper/modules';
+import { Navigation, Pagination, EffectFade } from 'swiper/modules';
 import 'swiper/css/bundle';
-import { FaBed, FaBath, FaRuler, FaParking, FaMapMarkerAlt, FaCalendar } from 'react-icons/fa';
-import { processPropertyData } from '../../utils/redfin';
+import 'swiper/css/effect-fade';
+import { FaBed, FaBath, FaParking, FaRuler, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
+import { getPropertyDetails, getPropertyImages } from '../../utils/zillow';
+import Contact from '../components/Contact';
 
 export default function PropertyDetail() {
-  const [property, setProperty] = useState(null);
+  SwiperCore.use([Navigation, Pagination, EffectFade]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [property, setProperty] = useState(null);
+  const [propertyImages, setPropertyImages] = useState([]);
+  const [contact, setContact] = useState(false);
   const { propertyId } = useParams();
 
-  SwiperCore.use([Navigation]);
-
   useEffect(() => {
-    const fetchPropertyDetail = async () => {
+    const fetchPropertyData = async () => {
       try {
         setLoading(true);
-        // For now, we'll use mock data since the API doesn't have a detail endpoint
-        const mockDetail = {
-          propertyId,
-          streetAddress: '92-1020 Aliinui Drive',
-          city: 'Kapolei',
-          state: 'HI',
-          zipCode: '96707',
-          price: 1250000,
-          beds: 5,
-          baths: 4,
-          sqFt: 2800,
-          lotSize: '8,000 sqft',
-          yearBuilt: '2023',
-          propertyType: 'Single Family',
-          mainImageUrl: 'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_0.jpg',
-          photos: [
-            'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_0.jpg',
-            'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_1.jpg',
-            'https://ssl.cdn-redfin.com/photo/169/mbphoto/376/genMid.PW23015376_2.jpg'
-          ],
-          description: 'Luxury home in Ko Olina with stunning ocean and golf course views. This beautiful property features an open concept living area, gourmet kitchen with high-end appliances, spacious primary suite, and a private pool.',
-          features: [
-            'Central AC',
-            'Triple Garage',
-            'Solar Panels',
-            'Pool',
-            'Golf Course View',
-            'Ocean View',
-            'High Ceilings',
-            'Gourmet Kitchen',
-            'Walk-in Closets',
-            'Smart Home Features'
-          ],
-          latitude: 21.3420,
-          longitude: -158.0540,
-          status: 'FOR_SALE',
-          daysOnMarket: 15
-        };
+        setError(null);
 
-        const processed = processPropertyData(mockDetail);
-        setProperty(processed);
-      } catch (err) {
-        console.error('Error fetching property details:', err);
-        setError('Failed to load property details');
+        // Fetch property details and images in parallel
+        const [propertyData, imagesData] = await Promise.all([
+          getPropertyDetails(propertyId),
+          getPropertyImages(propertyId),
+        ]);
+
+        setProperty(propertyData);
+        setPropertyImages(imagesData?.images || []);
+      } catch (error) {
+        console.error('Error fetching property:', error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPropertyDetail();
+    if (propertyId) {
+      fetchPropertyData();
+    }
   }, [propertyId]);
+
+  const formatPrice = (price) => {
+    if (!price) return 'Price not available';
+    return price.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+    });
+  };
+
+  const getDisplayImages = () => {
+    const images = [];
+
+    // Try propertyImages first
+    if (Array.isArray(propertyImages) && propertyImages.length > 0) {
+      images.push(...propertyImages);
+    }
+
+    // Then try property.photos
+    if (property?.photos && Array.isArray(property.photos) && property.photos.length > 0) {
+      images.push(...property.photos);
+    }
+
+    // Then try property.imgSrc
+    if (property?.imgSrc && !images.includes(property.imgSrc)) {
+      images.push(property.imgSrc);
+    }
+
+    // Return placeholder if no images found
+    return images.length > 0 ? images : ['https://via.placeholder.com/800x600?text=No+Image+Available'];
+  };
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        </div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center text-red-600 bg-red-50 p-4 rounded-lg">
-          <p>{error}</p>
-          <p className="text-sm mt-2">Please try again later</p>
-        </div>
+      <div className="text-center my-8 text-red-500">
+        Error: {error}
       </div>
     );
   }
 
   if (!property) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center text-gray-600">
-          Property not found
-        </div>
+      <div className="text-center my-8">
+        Property not found
       </div>
     );
   }
 
+  const images = getDisplayImages();
+
   return (
-    <main className="max-w-6xl mx-auto p-6">
-      <Swiper navigation>
-        {property.images.map((url, index) => (
-          <SwiperSlide key={index}>
-            <div className="relative h-[550px]">
+    <main className="max-w-6xl mx-auto px-4 py-6">
+      <div className="mb-6">
+        <Swiper
+          navigation
+          pagination={{ clickable: true }}
+          effect="fade"
+          loop={images.length > 1}
+          className="h-[550px] rounded-lg overflow-hidden"
+        >
+          {images.map((photo, index) => (
+            <SwiperSlide key={index}>
               <img
-                src={url}
+                src={photo}
                 alt={`Property image ${index + 1}`}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.log('Image failed to load:', photo);
+                  e.target.src = 'https://via.placeholder.com/800x600?text=No+Image+Available';
+                }}
               />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
 
-      <div className="mt-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              ${property.price.current.toLocaleString()}
-            </h1>
-            <div className="flex items-center text-gray-600 mt-2">
-              <FaMapMarkerAlt className="mr-2" />
-              <p className="text-lg">
-                {property.address.full}
-              </p>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="inline-block bg-green-600 text-white px-3 py-1 rounded-lg text-sm">
-              For Sale
-            </div>
-            <div className="flex items-center text-gray-600 mt-2 justify-end">
-              <FaCalendar className="mr-1" />
-              <span className="text-sm">{property.daysOnMarket} days on market</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex items-center text-gray-600">
-              <FaBed className="mr-2" />
-              <span>{property.details.beds} Beds</span>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex items-center text-gray-600">
-              <FaBath className="mr-2" />
-              <span>{property.details.baths} Baths</span>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex items-center text-gray-600">
-              <FaRuler className="mr-2" />
-              <span>{property.details.sqft.toLocaleString()} sqft</span>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex items-center text-gray-600">
-              <FaParking className="mr-2" />
-              <span>Lot: {property.details.lotSize}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">Description</h2>
-          <p className="text-gray-600 leading-relaxed">
-            {property.description}
-          </p>
-        </div>
-
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">Features</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {property.features.map((feature, index) => (
-              <div 
-                key={index}
-                className="bg-gray-50 p-3 rounded-lg text-gray-600 text-sm"
-              >
-                {feature}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="mb-6">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                    {property.address?.streetAddress}
+                  </h1>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <FaMapMarkerAlt />
+                    <p>
+                      {property.address?.city}, {property.address?.state} {property.address?.zipcode}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <h2 className="text-3xl font-bold text-slate-800">
+                    {formatPrice(property.price)}
+                    {property.listingStatus === 'forRent' && (
+                      <span className="text-xl font-normal text-gray-600"> / month</span>
+                    )}
+                  </h2>
+                  {property.zestimate && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      Zestimate: {formatPrice(property.zestimate)}
+                    </p>
+                  )}
+                  {property.daysOnZillow && (
+                    <div className="flex items-center gap-2 mt-2 text-sm text-gray-600 justify-end">
+                      <FaCalendarAlt />
+                      <span>Listed {property.daysOnZillow} days ago</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            ))}
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                <FaBed className="text-xl text-gray-600" />
+                <span>{property.bedrooms || 'N/A'} beds</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaBath className="text-xl text-gray-600" />
+                <span>{property.bathrooms || 'N/A'} baths</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaRuler className="text-xl text-gray-600" />
+                <span>{property.squareFootage?.toLocaleString() || 'N/A'} sqft</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaParking className="text-xl text-gray-600" />
+                <span>{property.parkingSpaces || 'N/A'} parking</span>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold mb-4">Description</h2>
+              <p className="text-gray-700 whitespace-pre-line">
+                {property.description || 'No description available.'}
+              </p>
+            </div>
+
+            {property.features && property.features.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold mb-4">Features</h2>
+                <ul className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {property.features.map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                      <span className="text-gray-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {property.schools && property.schools.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold mb-4">Nearby Schools</h2>
+                <div className="grid gap-4">
+                  {property.schools.map((school, index) => (
+                    <div key={index} className="border-b pb-2">
+                      <h3 className="font-semibold">{school.name}</h3>
+                      <p className="text-sm text-gray-600">{school.type} • {school.distance} miles</p>
+                      <p className="text-sm text-gray-600">Rating: {school.rating || 'N/A'}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">Property Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <p className="flex justify-between text-gray-600">
-                <span>Property Type:</span>
-                <span className="font-medium">{property.details.propertyType}</span>
-              </p>
-              <p className="flex justify-between text-gray-600">
-                <span>Year Built:</span>
-                <span className="font-medium">{property.details.yearBuilt}</span>
-              </p>
-              <p className="flex justify-between text-gray-600">
-                <span>Square Footage:</span>
-                <span className="font-medium">{property.details.sqft.toLocaleString()} sqft</span>
-              </p>
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-lg shadow-md p-6 sticky top-4">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-4">Contact Agent</h2>
+              <div className="text-gray-600 space-y-3 mb-6">
+                <p>
+                  Interested in this {property.propertyType?.toLowerCase() || 'property'}? Get in touch with a local agent who can help you:
+                </p>
+                <ul className="list-disc list-inside ml-2 text-sm">
+                  <li>Schedule a viewing</li>
+                  <li>Get detailed property information</li>
+                  <li>Discuss pricing and market value</li>
+                  <li>Learn about the neighborhood</li>
+                  <li>Start your purchase journey</li>
+                </ul>
+              </div>
             </div>
-            <div className="space-y-2">
-              <p className="flex justify-between text-gray-600">
-                <span>Lot Size:</span>
-                <span className="font-medium">{property.details.lotSize}</span>
-              </p>
-              <p className="flex justify-between text-gray-600">
-                <span>Bedrooms:</span>
-                <span className="font-medium">{property.details.beds}</span>
-              </p>
-              <p className="flex justify-between text-gray-600">
-                <span>Bathrooms:</span>
-                <span className="font-medium">{property.details.baths}</span>
-              </p>
-            </div>
-          </div>
-        </div>
 
-        <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Contact Agent</h2>
-          <p className="text-gray-600 mb-4">
-            Interested in this property? Contact our agent for more information or to schedule a viewing.
-          </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-            Contact Agent
-          </button>
+            <button
+              onClick={() => setContact(true)}
+              className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
+            >
+              Contact Agent Now
+            </button>
+
+            <div className="mt-4 text-center text-sm text-gray-500">
+              Quick response guaranteed • No obligation
+            </div>
+
+            {contact && <Contact property={property} onClose={() => setContact(false)} />}
+          </div>
         </div>
       </div>
     </main>
