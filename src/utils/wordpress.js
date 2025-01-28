@@ -96,3 +96,33 @@ export async function fetchContentBySlug(slug) {
     return null;
   }
 }
+
+export async function fetchRelatedPosts(currentSlug, postType = 'post', limit = 3) {
+  try {
+    // Fetch current post to get its categories
+    const currentPost = await fetchContentBySlug(currentSlug);
+    if (!currentPost) return [];
+
+    // Get category IDs from the current post
+    const categoryIds = currentPost.categories.map(cat => cat.id);
+    if (categoryIds.length === 0) return [];
+
+    // Fetch posts in the same categories, excluding the current post
+    const params = {
+      categories: categoryIds.join(','),
+      exclude: currentPost.id.toString(),
+      per_page: limit + 1, // Fetch one extra to ensure we have enough after filtering
+    };
+
+    const relatedPosts = await fetchFromAPI(postType === 'post' ? 'posts' : 'pages', params);
+    
+    // Process and return related posts, excluding the current one
+    return relatedPosts
+      .map(processContent)
+      .filter(post => post.slug !== currentSlug)
+      .slice(0, limit);
+  } catch (error) {
+    console.error('Error fetching related posts:', error);
+    return [];
+  }
+}
