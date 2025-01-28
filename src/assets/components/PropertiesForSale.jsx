@@ -82,9 +82,10 @@ export default function PropertiesForSale() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property) => (
-          <div
+          <Link
+            to={`/property/${property.id}`}
             key={property.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+            className="block bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300"
           >
             <div className="relative h-48">
               <img
@@ -153,7 +154,7 @@ export default function PropertiesForSale() {
                 </div>
               )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
