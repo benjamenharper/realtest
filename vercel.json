@@ -9,7 +9,7 @@
       "destination": "/index.html"
     }
   ],
-  "buildCommand": "npm run build",
+  "buildCommand": "rm -rf node_modules/.cache && npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
   "installCommand": "npm install",
