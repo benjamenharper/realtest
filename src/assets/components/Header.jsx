@@ -68,8 +68,8 @@ export default function Header() {
               News
             </li>
           </Link>
-          <Link to="/profile">
-            {currentUser ? (
+          {currentUser && (
+            <Link to="/profile">
               <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium">
                 {currentUser.avatar ? (
                   <img
@@ -81,12 +81,8 @@ export default function Header() {
                   "Profile"
                 )}
               </li>
-            ) : (
-              <li className="text-slate-700 hover:text-blue-600 duration-200 font-medium">
-                Sign in
-              </li>
-            )}
-          </Link>
+            </Link>
+          )}
         </ul>
       </div>
     </header>
