@@ -41,7 +41,7 @@ export default function PostCard({ post }) {
         />
         <div className="flex justify-end">
           <Link 
-            to={`/blog/${post.slug}`}
+            to={`/${post.slug}`}
             className="text-blue-600 hover:text-blue-700 text-sm font-medium"
           >
             Read More

@@ -11,6 +11,7 @@ import UpdateListing from "./assets/pages/UpdateListing";
 import Listing from "./assets/pages/Listing";
 import Search from "./assets/pages/Search";
 import Blog from "./assets/pages/Blog";
+import BlogPost from "./assets/pages/BlogPost";
 import Footer from "./assets/components/Footer";
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/:slug" element={<BlogPost />} />
         <Route path="/listing/:listingId" element={<Listing />} />
         <Route path="/search" element={<Search />} />
         <Route element={<PrivateRoute />}>
