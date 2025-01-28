@@ -7,6 +7,7 @@ import { FaArrowAltCircleRight } from "react-icons/fa";
 import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
 import RecentlySold from '../components/RecentlySold';
+import PropertiesForSale from '../components/PropertiesForSale';
 
 export default function Home() {
   // States for different types of listings
@@ -99,6 +100,9 @@ export default function Home() {
             </SwiperSlide>
           ))}
       </Swiper>
+
+      {/* Properties For Sale Section */}
+      <PropertiesForSale />
 
       {/* listing results for offer, sale and rent */}
 
